@@ -51,3 +51,35 @@ register_deactivation_hook( __FILE__, 'prescriptionbook_remove_capabilities');
  * Adding CMB2 for custom fields
  */
 require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
+
+
+/**
+ * Granting prescription access for index page for certain users
+ */
+
+ add_action( 'pre_get_posts', 'prescriptionbook_grant_access');
+
+ function prescriptionbook_grant_access( $query) {
+      if (isset($query->query_vars['post_type'])){
+        if ($query->query_vars['post_type'] == 'prescription'){
+          if (defined( 'REST_REQUEST') && REST_REQUEST){
+           if (current_user_can('editor') || current_user_can('administrator')){
+              $query->set('post_status', 'private');
+
+            } elseif ( current_user_can('physiotherapist')){
+            $query->set('post_status', 'private');
+            
+           } elseif (current_user_can ('patient')){
+              $query->set('post_status', 'private');
+              $query->set('meta_key', 'prescriptionbook_patient');
+              $query->set('meta_value', get_current_user_id());
+            } 
+
+          
+          
+          }
+        }
+      }
+
+
+ }

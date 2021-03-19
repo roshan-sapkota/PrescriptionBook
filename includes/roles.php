@@ -31,8 +31,12 @@ function prescriptionbook_deregister_role(){
      foreach($roles as $the_role){
          $role = get_role($the_role);
          $role->add_cap('read');
+         
 
      }
+     // giving access to patients to read private prescription but will be limited to access when they try to access from rest api
+     $p_role = get_role('patient');
+     $p_role-> add_cap('read_private_prescriptions');
      
      $u_roles = array('administrator','editor', 'physiotherapist');
 

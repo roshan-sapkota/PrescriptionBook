@@ -62,13 +62,13 @@ function prescriptionbook_register_rest_api_box() {
 	);
 	$users = get_users( $args );
 	foreach ($users as $user) {
-		$patients[$user->display_name] = esc_html__($user->display_name, 'prescriptionbook');
+		$patients[$user->ID] = esc_html__($user->display_name, 'prescriptionbook');
 	}
 
 	$cmb_rest->add_field( array(
 		'name'             => esc_html__( 'Select Patient', 'prescriptionbook' ),
 		'desc'             => esc_html__( 'Select the patient you are prescribing', 'prescriptionbook' ),
-		'id'               => 'prescriptionbook_patient',
+		'id'               => $prefix . 'patient',
 		'type'             => 'select',
 		'show_option_none' => false,
 		'options'          => $patients,
