@@ -85,14 +85,15 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
  }
 
  //adding filter to content
- add_filter('the_content' , 'rest_access_content_filter');
- function rest_access_content_filter($content){
+ add_filter('the_content' , 'rest_access_filter_content');
+ function rest_access_filter_content($content){
    if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
      return $content;
    } elseif (current_user_can('patient')){
      // if('meta_key' == 'prescriptionbook_patient' && 'meta_value' == get_current_user_id()){
       global $post;
       $check_id = $post->ID;
+     // remove_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100 );
       $check_patient = get_post_meta($check_id, 'prescriptionbook_patient', true);
       if($check_patient == get_current_user_id()){
         return $content;
@@ -103,3 +104,61 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
    }
 
  }
+
+ //adding filter to title
+ add_filter('private_title_format' , 'rest_access_filter_title');
+ function rest_access_filter_title($title){
+   if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
+     return $title;
+   } elseif (current_user_can('patient')){
+     // if('meta_key' == 'prescriptionbook_patient' && 'meta_value' == get_current_user_id()){
+      global $post;
+      $check_id = $post->ID;
+      //remove_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100 );
+      $check_patient = get_post_meta($check_id, 'prescriptionbook_patient', true);
+      if($check_patient == get_current_user_id()){
+        
+        return $title;
+      } else {
+        $content = 'did not wrok';
+        return $content;
+      }
+   }
+
+ }
+
+ //adding filter to custom post meta data
+ function rest_access_filter_metadata($metadata, $object_id, $meta_key, $single){
+
+  // Here is the catch, add additional controls if needed (post_type, etc)
+  $meta_needed = 'prescriptionbook_patient';
+  
+        if ( isset( $meta_key ) && $meta_needed == $meta_key ){
+          if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
+            return $metadata;
+          }
+          if (current_user_can('patient')){
+            
+            remove_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100 );
+            $current_meta = get_post_meta( $object_id, $meta_needed, TRUE );
+            add_filter ('get_post_metadata', 'rest_access_filter_metadata', 100, 4 );
+            //global $post;
+            //$check_id = $post->ID;
+               // $check_patient = get_post_meta($check_id, 'prescriptionbook_patient', true);
+                if($current_meta == get_current_user_id()){
+                  return $metadata;
+                      } else {
+                       //use $wpdb to get the value
+        //global $wpdb;
+        //$value = $wpdb->get_var( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $object_id AND  meta_key = '".$meta_key."'" );
+                        $current_meta = 'hidden';
+                        return $current_meta;
+                      }
+                      
+                }            
+         }   
+  // Return original if the check does not pass
+  return $metadata;
+ }
+
+add_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100, 4 );
