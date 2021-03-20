@@ -129,9 +129,11 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
 
  //adding filter to custom post meta data
  function rest_access_filter_metadata($metadata, $object_id, $meta_key, $single){
-
+//add more meta data to the following array
+  $the_meta =['prescriptionbook_patient', 'prescriptionbook_medicine'];
+  foreach($the_meta as $meta_needed){
   // Here is the catch, add additional controls if needed (post_type, etc)
-  $meta_needed = 'prescriptionbook_patient';
+  //$meta_needed = 'prescriptionbook_patient';
   
         if ( isset( $meta_key ) && $meta_needed == $meta_key ){
           if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
@@ -140,25 +142,26 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
           if (current_user_can('patient')){
             
             remove_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100 );
-            $current_meta = get_post_meta( $object_id, $meta_needed, TRUE );
+            $patient_meta = get_post_meta( $object_id, 'prescriptionbook_patient', TRUE );
             add_filter ('get_post_metadata', 'rest_access_filter_metadata', 100, 4 );
             //global $post;
             //$check_id = $post->ID;
                // $check_patient = get_post_meta($check_id, 'prescriptionbook_patient', true);
-                if($current_meta == get_current_user_id()){
+                if($patient_meta == get_current_user_id()){
                   return $metadata;
                       } else {
                        //use $wpdb to get the value
         //global $wpdb;
         //$value = $wpdb->get_var( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $object_id AND  meta_key = '".$meta_key."'" );
-                        $current_meta = 'hidden';
-                        return $current_meta;
+                        $hidden_meta = 'hidden';
+                        return $hidden_meta;
                       }
                       
                 }            
          }   
   // Return original if the check does not pass
-  return $metadata;
- }
+}
+return $metadata;
+}
 
 add_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100, 4 );
