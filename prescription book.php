@@ -83,3 +83,23 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
 
 
  }
+
+ //adding filter to content
+ add_filter('the_content' , 'rest_access_content_filter');
+ function rest_access_content_filter($content){
+   if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
+     return $content;
+   } elseif (current_user_can('patient')){
+     // if('meta_key' == 'prescriptionbook_patient' && 'meta_value' == get_current_user_id()){
+      global $post;
+      $check_id = $post->ID;
+      $check_patient = get_post_meta($check_id, 'prescriptionbook_patient', true);
+      if($check_patient == get_current_user_id()){
+        return $content;
+      } else {
+        $content = 'did not wrok';
+        return $content;
+      }
+   }
+
+ }
