@@ -47,6 +47,7 @@ function prescriptionbook_deregister_role(){
         $role->add_cap('edit_published_prescriptions');
         $role->add_cap('delete_private_prescriptions');
         $role->add_cap('delete_prescriptions');
+        $role->add_cap('upload_files');
         $role->add_cap('delete_published_prescriptions'); 
         
      }
@@ -59,7 +60,7 @@ function prescriptionbook_deregister_role(){
         $role->add_cap('edit_others_prescriptions');
         $role->add_cap('edit_private_prescriptions');               
         $role->add_cap('delete_others_prescriptions');
-
+        $role->add_cap('upload_files');    
 
      }
  }
