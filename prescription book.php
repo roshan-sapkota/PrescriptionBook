@@ -3,7 +3,7 @@
   Plugin Name:       Prescription Book
   Plugin URI:        https://roshansapkota.com
   Description:       This plugin will store the prescriptions given by the physiotherapists.
-  Version:           0.0.1
+  Version:           0.0.2
   Requires at least: 5.2
   Requires PHP:      7.2
   Author:            Roshan Sapkota
@@ -98,7 +98,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
       if($check_patient == get_current_user_id()){
         return $content;
       } else {
-        $content = 'did not wrok';
+        $content = 'Not authorised to access data.';
         return $content;
       }
    }
@@ -120,7 +120,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
         
         return $title;
       } else {
-        $content = 'did not wrok';
+        $content = 'Not authorised to access data.';
         return $content;
       }
    }
@@ -130,7 +130,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
  //adding filter to custom post meta data
  function rest_access_filter_metadata($metadata, $object_id, $meta_key, $single){
 //add more meta data to the following array
-  $the_meta =['prescriptionbook_patient', 'prescriptionbook_medicine'];
+  $the_meta =['prescriptionbook_patient', 'prescriptionbook_videos'];
   foreach($the_meta as $meta_needed){
   // Here is the catch, add additional controls if needed (post_type, etc)
   //$meta_needed = 'prescriptionbook_patient';
@@ -153,7 +153,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
                        //use $wpdb to get the value
         //global $wpdb;
         //$value = $wpdb->get_var( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = $object_id AND  meta_key = '".$meta_key."'" );
-                        $hidden_meta = 'hidden';
+                        $hidden_meta = 'Not authorised to access data.';
                         return $hidden_meta;
                       }
                       
@@ -165,3 +165,10 @@ return $metadata;
 }
 
 add_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100, 4 );
+
+add_filter( 'the_title', 'prescriptionbook_remove_private_prefix');
+
+function prescriptionbook_remove_private_prefix($title){
+  $title = str_replace('Private: ', '', $title);
+  return $title;
+}

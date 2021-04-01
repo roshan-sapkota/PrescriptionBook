@@ -1,0 +1,12 @@
+1. edit oath.js file
+
+var ROOTURL = "localhost/thv2"; // root url
+const RESTROOT = ROOTURL + '/wp-json';
+const RESTROUTE = RESTROOT + '/wp/v2/tasks/';
+
+var jso = new JSO({
+	providerID: "TeleHealth_Patient_App", // client name in the settings of oauth2 
+	client_id: "ppOOIclEkpw1iIGvlFCzi4j71PsfPmzIvPXO2h2r",//client id
+	redirect_uri: "8jxz2SWCJi0v5fCoPnkzSeWznOln31pHMrvpJnOX]",//client secret
+	authorization: ROOTURL + "/oauth/authorize"
+});

@@ -76,8 +76,8 @@ function prescriptionbook_register_rest_api_box() {
 
 
 	$cmb_rest->add_field( array(
-		'name'    => esc_html__( 'Medicine', 'prescriptionbook' ),
-		'id'      => $prefix . 'medicine',
+		'name'    => esc_html__( 'Select Videos', 'prescriptionbook' ),
+		'id'      => $prefix . 'videos',
 		'type'    => 'wysiwyg',
 		'options' => array(
 			'textarea_rows' => 5,
