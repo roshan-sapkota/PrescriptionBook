@@ -8,3 +8,6 @@ Upon installing the plugin:
     To prevent the access to the prescriptions by other users it is must to set the visibility to private.
     ![alt text](https://github.com/mroshan33/PrescriptionBook/blob/master/images/New%20Prescription%20View.jpg?raw=true)
     
+    
+ Once the prescription is saved, it is then displayed to the patient via a different standalone app using REST API. Check out my repo "THPatient" which is a standalone app with authentication feature and displays the prescriptions of the logged in patient.
+    ![alt text](https://github.com/mroshan33/PrescriptionBook/blob/master/images/Prescription%20List%20View%20in%20the%20standalone%20application.jpg?raw=true)
