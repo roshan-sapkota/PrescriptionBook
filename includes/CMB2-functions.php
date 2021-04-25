@@ -84,6 +84,20 @@ function prescriptionbook_register_rest_api_box() {
 		),
 	) );
 
+	$cmb_rest->add_field( array(
+		'name'    => esc_html__( 'Select Survey Questions', 'cmb2' ),
+		'desc'    => esc_html__( 'Select the questions you would like to ask to your patient', 'cmb2' ),
+		'id'      => 'prescriptionbook_demo_multicheckbox',
+		'type'    => 'multicheck',
+		// 'multiple' => true, // Store values in individual rows
+		'options' => array(
+			'check1' => esc_html__( 'On the scale of 1 to 10, how much pain did you feel?', 'cmb2' ),
+			'check2' => esc_html__( 'Did you experience any pain during your exercise?', 'cmb2' ),
+			'check3' => esc_html__( 'Was the instructions clear to you?', 'cmb2' ),
+		),
+		// 'inline'  => true, // Toggles display to inline
+	) );
+
 	
 
 }

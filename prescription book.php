@@ -85,6 +85,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
  }
 
  //adding filter to content
+ // Explainations: The patient user role can read private posts(see roles.php), so to limit access to prescriptions other than theirs following code has been written
  add_filter('the_content' , 'rest_access_filter_content');
  function rest_access_filter_content($content){
    if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
@@ -105,7 +106,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
 
  }
 
- //adding filter to title
+ //adding filter to title so that only authorised patient will be able to see it.
+ // Explainations: The patient user role can read private posts(see roles.php), so to limit access to prescriptions other than theirs following code has been written
  add_filter('private_title_format' , 'rest_access_filter_title');
  function rest_access_filter_title($title){
    if (current_user_can('administrator') || current_user_can('editor') || current_user_can('physiotherapist')){
@@ -127,7 +129,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
 
  }
 
- //adding filter to custom post meta data
+ //adding filter to custom post meta data so that one patient is not able to see prescriptions of other patients
+ // Explainations: The patient user role can read private posts(see roles.php), so to limit access to prescriptions other than theirs following code has been written
  function rest_access_filter_metadata($metadata, $object_id, $meta_key, $single){
 //add more meta data to the following array
   $the_meta =['prescriptionbook_patient', 'prescriptionbook_videos'];
@@ -140,7 +143,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/CMB2-functions.php';
             return $metadata;
           }
           if (current_user_can('patient')){
-            
+            //removing the filter otherwise it is going to do endless loop
             remove_filter( 'get_post_metadata', 'rest_access_filter_metadata', 100 );
             $patient_meta = get_post_meta( $object_id, 'prescriptionbook_patient', TRUE );
             add_filter ('get_post_metadata', 'rest_access_filter_metadata', 100, 4 );
